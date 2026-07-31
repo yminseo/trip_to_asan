@@ -1,0 +1,103 @@
+{
+  "title": "도고 온천 일정표",
+  "subtitle": "1박 2일 · 5인 · 아산 도고",
+
+  "people": [
+    { "id": "suhyuk",   "name": "수혁", "s": "수", "c": "#147B7B", "role": "차량 · 홍성 출발" },
+    { "id": "yongmin",  "name": "용민", "s": "용", "c": "#B0472F", "role": "버스 · 서울 출발" },
+    { "id": "sangwoo",  "name": "상우", "s": "상", "c": "#2F63A8", "role": "차량 · 노은역 출발" },
+    { "id": "seokhoon", "name": "석훈", "s": "석", "c": "#6B54A0", "role": "상우 차 동승" },
+    { "id": "hyunho",   "name": "현호", "s": "현", "c": "#3C8748", "role": "부강면에서 합류" }
+  ],
+
+  "places": {
+    "hongseong": { "n": "홍성중학교",             "lat": 36.6013, "lng": 126.6650 },
+    "onyang":    { "n": "아산 온양고속버스터미널", "lat": 36.7830, "lng": 127.0050 },
+    "emart":     { "n": "이마트 아산점",           "lat": 36.7860, "lng": 127.0160 },
+    "lunch":     { "n": "이마트 주변 점심 식당",   "lat": 36.7853, "lng": 127.0148 },
+    "artier":    { "n": "아르띠에 도고",           "lat": 36.7620, "lng": 126.8490 },
+    "paradise":  { "n": "파라다이스 스파 도고",    "lat": 36.7601, "lng": 126.8465 },
+    "bugang":    { "n": "휴식시간 (세종 부강면)",  "lat": 36.5240, "lng": 127.3650 },
+    "noeun":     { "n": "노은역",                 "lat": 36.3801, "lng": 127.3237 },
+    "sjr":       { "n": "선정릉역",               "lat": 37.5106, "lng": 127.0435 },
+    "seoulexp":  { "n": "서울경부고속버스터미널",  "lat": 37.5030, "lng": 127.0048 }
+  },
+
+  "schedule": [
+    { "id": "s1", "day": 1, "start": "09:00", "end": "09:55", "kind": "move", "who": ["suhyuk"],
+      "title": "홍성중학교 → 온양터미널", "from": "hongseong", "to": "onyang",
+      "mode": "자동차", "mins": 55, "km": 44,
+      "back": "용민 도착 10:00 기준",
+      "note": "터미널에서 용민 픽업. 도착이 늦어지면 용민이 대합실에서 대기." },
+
+    { "id": "y1", "day": 1, "start": "07:50", "end": "08:08", "kind": "move", "who": ["yongmin"],
+      "title": "선정릉역 → 서울경부고속터미널", "from": "sjr", "to": "seoulexp",
+      "mode": "지하철 9호선", "mins": 18, "km": 8,
+      "back": "08:30 버스 · 20분 전",
+      "note": "9호선 급행이면 더 빠릅니다. 표는 미리 예매해두는 게 안전." },
+
+    { "id": "y2", "day": 1, "start": "08:30", "end": "10:00", "kind": "move", "who": ["yongmin"], "fixed": true,
+      "title": "서울경부 → 온양터미널 고속버스", "from": "seoulexp", "to": "onyang",
+      "mode": "고속버스", "mins": 90, "km": 105,
+      "note": "08:30 탑승 · 10:00 도착. 이 시각이 오늘 일정의 기준점입니다." },
+
+    { "id": "g1", "day": 1, "start": "08:20", "end": "08:52", "kind": "move", "who": ["sangwoo", "seokhoon"],
+      "title": "노은역 → 휴식시간(부강면)", "from": "noeun", "to": "bugang",
+      "mode": "자동차", "mins": 32, "km": 22,
+      "back": "이마트 10:00 도착 기준",
+      "note": "석훈은 노은역에서 상우 차에 탑승." },
+
+    { "id": "h1", "day": 1, "start": "08:50", "end": "09:05", "kind": "stay", "who": ["hyunho"],
+      "title": "휴식시간(부강면)에서 상우 차 탑승 대기", "place": "bugang",
+      "note": "상우·석훈 08:52 도착 예정. 09:05 출발." },
+
+    { "id": "g2", "day": 1, "start": "09:05", "end": "10:00", "kind": "move", "who": ["sangwoo", "seokhoon", "hyunho"],
+      "title": "휴식시간(부강면) → 이마트 아산점", "from": "bugang", "to": "emart",
+      "mode": "자동차", "mins": 55, "km": 58,
+      "back": "장보기 10:00 시작 기준",
+      "note": "3명이 먼저 도착해서 장보기 시작." },
+
+    { "id": "s2", "day": 1, "start": "10:05", "end": "10:20", "kind": "move", "who": ["suhyuk", "yongmin"],
+      "title": "온양터미널 → 이마트 아산점", "from": "onyang", "to": "emart",
+      "mode": "자동차", "mins": 12, "km": 4.5,
+      "note": "용민 픽업 후 이동. 장보기 중간에 합류합니다." },
+
+    { "id": "c1", "day": 1, "start": "10:00", "end": "11:00", "kind": "stay", "who": "all",
+      "title": "아산 이마트 장보기", "place": "emart",
+      "note": "상우·석훈·현호가 10:00에 시작, 수혁·용민은 10:20 합류. 쇼핑리스트 탭 참고." },
+
+    { "id": "c2", "day": 1, "start": "11:10", "end": "12:05", "kind": "stay", "who": "all",
+      "title": "이마트 주변 점심식사", "place": "lunch",
+      "note": "55분. 12:30 도착을 지키려면 여기서 늦어지면 안 됩니다." },
+
+    { "id": "c3", "day": 1, "start": "12:05", "end": "12:30", "kind": "move", "who": "all",
+      "title": "이마트 아산점 → 아르띠에 도고", "from": "emart", "to": "artier",
+      "mode": "자동차", "mins": 22, "km": 19,
+      "back": "숙소 도착 12:30 기준" },
+
+    { "id": "c4", "day": 1, "start": "12:30", "end": "12:55", "kind": "stay", "who": "all", "fixed": true,
+      "title": "아르띠에 도고 도착 · 짐 풀기", "place": "artier",
+      "note": "장 본 식재료는 바로 냉장고로. 수영복은 이때 챙겨서 나가기." },
+
+    { "id": "c5", "day": 1, "start": "12:55", "end": "13:00", "kind": "move", "who": "all",
+      "title": "아르띠에 도고 → 파라다이스 스파 도고", "from": "artier", "to": "paradise",
+      "mode": "자동차 3분 / 도보 8분", "mins": 3, "km": 0.6 },
+
+    { "id": "c6", "day": 1, "start": "13:00", "end": "18:00", "kind": "stay", "who": "all", "fixed": true,
+      "title": "파라다이스 스파 도고", "place": "paradise",
+      "note": "입장 13:00 · 퇴장 18:00. 5시간." },
+
+    { "id": "c7", "day": 1, "start": "18:00", "end": "18:05", "kind": "move", "who": "all",
+      "title": "파라다이스 → 아르띠에 도고", "from": "paradise", "to": "artier",
+      "mode": "자동차 3분 / 도보 8분", "mins": 3, "km": 0.6,
+      "note": "씻고 정리하면 바베큐까지 55분 여유." },
+
+    { "id": "c8", "day": 1, "start": "19:00", "end": null, "kind": "stay", "who": "all",
+      "title": "바베큐", "place": "artier",
+      "note": "숯 피우는 데 20~30분. 18:30쯤 불부터 붙여두면 편합니다." },
+
+    { "id": "c9", "day": 2, "start": "11:00", "end": null, "kind": "stay", "who": "all", "fixed": true,
+      "title": "아르띠에 도고 체크아웃", "place": "artier",
+      "note": "10:30부터 짐 정리 시작 권장. 쓰레기·그릴 정리 확인." }
+  ]
+}

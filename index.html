@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>도고 1박 2일 · 5인 일정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F5F3;
+  --card:#FFFFFF;
+  --ink:#0F2E2A;
+  --ink-60:rgba(15,46,42,.62);
+  --ink-38:rgba(15,46,42,.38);
+  --ink-14:rgba(15,46,42,.14);
+  --spring:#147B7B;      /* 온천 물빛 */
+  --mist:#DBE8E4;
+  --clay:#B0472F;        /* 고정 시각 */
+  --line:rgba(15,46,42,.12);
+  --display:"Gowun Batang","Nanum Myeongjo",'Apple SD Gothic Neo',serif;
+  --body:"IBM Plex Sans KR",'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 72px}
+
+/* ---------- header ---------- */
+header.top{padding:34px 0 18px}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--spring);margin:0 0 10px
+}
+h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(30px,7vw,46px);line-height:1.06;margin:0 0 8px;letter-spacing:-.01em
+}
+h1 em{font-style:normal;color:var(--spring)}
+.sub{margin:0;color:var(--ink-60);font-size:14px;max-width:52ch}
+
+/* ---------- tabs ---------- */
+nav.tabs{display:flex;gap:2px;margin:24px 0 0;border-bottom:1px solid var(--line)}
+nav.tabs button{
+  appearance:none;background:none;border:0;cursor:pointer;
+  font-family:var(--body);font-size:14px;font-weight:400;color:var(--ink-38);
+  padding:10px 14px;border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--spring);font-weight:500}
+nav.tabs button:hover{color:var(--ink)}
+
+/* ---------- people ---------- */
+.people{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 6px;align-items:center}
+.chip{
+  appearance:none;cursor:pointer;background:var(--card);
+  border:1px solid var(--line);border-radius:999px;
+  display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;
+  font-family:var(--body);font-size:13.5px;color:var(--ink-60);
+  transition:border-color .18s,color .18s,background .18s;
+}
+.chip .dot{
+  width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--display);font-size:12.5px;font-weight:700;color:#fff;
+  background:var(--ink-38);transition:background .18s;
+}
+.chip[aria-pressed="true"]{color:var(--ink);border-color:currentColor;background:var(--card)}
+.chip[aria-pressed="true"] .dot{background:var(--c)}
+.chip small{font-family:var(--mono);font-size:10.5px;color:var(--ink-38)}
+.people .hint{font-family:var(--mono);font-size:11px;color:var(--ink-38);margin-left:4px}
+
+/* ---------- layout ---------- */
+.stage{display:grid;grid-template-columns:1fr;gap:26px;margin-top:14px}
+@media(min-width:940px){
+  .stage{grid-template-columns:1fr 336px;align-items:start}
+  aside.detail-col{position:sticky;top:22px}
+}
+
+/* ---------- timeline ---------- */
+.daymark{
+  display:flex;align-items:baseline;gap:10px;margin:26px 0 12px;
+}
+.daymark b{font-family:var(--display);font-size:19px;font-weight:700}
+.daymark span{font-family:var(--mono);font-size:11px;color:var(--ink-38);letter-spacing:.1em}
+.daymark:first-child{margin-top:6px}
+
+ol.tl{list-style:none;margin:0;padding:0 0 0 78px;position:relative}
+ol.tl:before{
+  content:"";position:absolute;left:56px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,var(--mist),var(--spring));border-radius:2px;
+}
+ol.tl li{position:relative;margin:0 0 10px}
+.node{
+  position:absolute;left:-26.5px;top:16px;width:11px;height:11px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--spring);z-index:2;
+}
+.node.fixed{border-radius:2px;background:var(--clay);border-color:var(--clay)}
+.node.move{border-style:dashed;border-color:var(--ink-38)}
+.at{
+  position:absolute;left:-78px;top:34px;width:48px;text-align:right;
+  font-family:var(--mono);font-size:10px;color:var(--ink-38);letter-spacing:-.02em;
+}
+
+.item{
+  width:100%;text-align:left;background:var(--card);cursor:pointer;
+  border:1px solid var(--line);border-left:2px solid transparent;border-radius:3px;
+  padding:13px 15px;font-family:var(--body);color:var(--ink);
+  transition:border-color .18s,box-shadow .18s,transform .18s;
+}
+.item:hover{border-color:var(--ink-14);box-shadow:0 2px 14px rgba(15,46,42,.06)}
+.item[aria-expanded="true"]{border-left-color:var(--spring);box-shadow:0 2px 18px rgba(15,46,42,.08)}
+.item .row1{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.item .time{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--spring);letter-spacing:-.02em}
+.item .time.f{color:var(--clay)}
+.item .ttl{font-size:15px;font-weight:400;letter-spacing:-.01em}
+.item .ttl b{font-weight:500}
+.item .row2{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:2px;padding:2px 6px;color:var(--ink-38);
+}
+.tag.fx{color:var(--clay);border-color:rgba(176,71,47,.3)}
+.tag.rv{color:var(--spring);border-color:rgba(20,123,123,.32)}
+.who{display:flex;gap:3px}
+.who i{
+  width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-style:normal;
+  font-family:var(--display);font-size:9.5px;font-weight:700;color:#fff;
+}
+.item .note{margin-top:6px;font-size:12.5px;color:var(--ink-60)}
+
+.slot:empty{display:none}
+.slot{margin:8px 0 16px}
+@media(min-width:940px){ .slot{display:none} }
+
+/* ---------- detail card ---------- */
+.detail{
+  background:var(--card);border:1px solid var(--line);border-radius:3px;overflow:hidden;
+}
+.detail .dhead{padding:14px 16px 12px;border-bottom:1px solid var(--line)}
+.detail .dkind{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--spring)}
+.detail .dttl{font-family:var(--display);font-size:17px;font-weight:700;line-height:1.3;margin-top:5px}
+.detail .dpath{margin-top:6px;font-size:13px;color:var(--ink-60)}
+.detail .dpath span{color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.stats div{padding:10px 8px;text-align:center;border-right:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+.stats dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ink-38);text-transform:uppercase;margin:0}
+.stats dd{margin:3px 0 0;font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:-.03em}
+.map{display:block;width:100%;height:auto;background:#EAF0EE}
+.detail .dnote{padding:12px 16px;font-size:12.5px;color:var(--ink-60);border-top:1px solid var(--line)}
+.links{display:flex;gap:8px;padding:12px 16px 14px;flex-wrap:wrap}
+.links a{
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-decoration:none;
+  border:1px solid var(--line);border-radius:2px;padding:6px 10px;color:var(--ink-60);
+}
+.links a:hover{border-color:var(--spring);color:var(--spring)}
+.empty{
+  border:1px dashed var(--line);border-radius:3px;padding:22px 18px;
+  font-size:13px;color:var(--ink-38);text-align:center;font-family:var(--mono);line-height:1.7
+}
+
+/* ---------- lists ---------- */
+.listhead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:24px 0 4px}
+.listhead h2{font-family:var(--display);font-size:22px;font-weight:700;margin:0}
+.listhead p{margin:4px 0 0;font-size:13px;color:var(--ink-60)}
+.gauge{min-width:170px}
+.gauge .bar{height:4px;background:var(--mist);border-radius:2px;overflow:hidden}
+.gauge .bar i{display:block;height:100%;background:var(--spring);width:0;transition:width .3s}
+.gauge .num{font-family:var(--mono);font-size:11px;color:var(--ink-38);margin-top:5px;text-align:right}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:14px 0 6px}
+.toolbar button,.toolbar label.fbtn{
+  appearance:none;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:2px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-60);padding:7px 11px;
+}
+.toolbar button:hover,.toolbar label.fbtn:hover{border-color:var(--spring);color:var(--spring)}
+.toolbar .src{align-self:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-38);letter-spacing:.02em}
+.toolbar .src b{font-weight:400;color:var(--spring)}
+code{font-family:var(--mono);font-size:.92em;background:var(--mist);padding:1px 4px;border-radius:2px}
+
+.grp{margin-top:20px}
+.grp h3{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-38);margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line)
+}
+.grp ul{list-style:none;margin:0;padding:0}
+.grp li{display:flex;align-items:flex-start;gap:11px;padding:8px 2px;border-bottom:1px solid rgba(15,46,42,.055)}
+.grp li:last-child{border-bottom:0}
+.grp li label{display:flex;align-items:flex-start;gap:11px;flex:1;cursor:pointer;min-width:0}
+.grp input[type=checkbox]{
+  appearance:none;width:17px;height:17px;flex:none;margin-top:2px;
+  border:1.5px solid var(--ink-38);border-radius:2px;background:var(--card);cursor:pointer;
+  transition:background .15s,border-color .15s;
+}
+.grp input[type=checkbox]:checked{background:var(--spring);border-color:var(--spring)}
+.grp input[type=checkbox]:checked:after{content:"";display:block;width:4px;height:8px;margin:2px 0 0 5px;border:2px solid #fff;border-top:0;border-left:0;transform:rotate(42deg)}
+.grp .txt{font-size:14.5px;letter-spacing:-.01em}
+.grp .qty{font-family:var(--mono);font-size:11.5px;color:var(--spring);margin-left:6px}
+.grp .sub2{display:block;font-size:12px;color:var(--ink-38);margin-top:1px}
+.grp li.done .txt{color:var(--ink-38);text-decoration:line-through;text-decoration-thickness:1px}
+.del{
+  appearance:none;background:none;border:0;cursor:pointer;color:var(--ink-14);
+  font-family:var(--mono);font-size:15px;line-height:1;padding:2px 4px;flex:none
+}
+.del:hover{color:var(--clay)}
+.addrow{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.addrow input[type=text],.addrow select{
+  font-family:var(--body);font-size:13.5px;padding:8px 10px;border:1px solid var(--line);
+  border-radius:2px;background:var(--card);color:var(--ink);
+}
+.addrow input[type=text]{flex:1;min-width:150px}
+.addrow input.q{flex:none;width:82px}
+.addrow button{
+  appearance:none;cursor:pointer;background:var(--ink);color:var(--paper);border:0;border-radius:2px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;padding:8px 15px
+}
+.addrow button:hover{background:var(--spring)}
+
+footer.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:10.5px;color:var(--ink-38);line-height:1.9}
+
+[hidden]{display:none !important}
+:focus-visible{outline:2px solid var(--spring);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+@media(max-width:520px){
+  ol.tl{padding-left:62px}
+  ol.tl:before{left:44px}
+  .node{left:-22.5px}
+  .at{left:-62px;width:36px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stats div:nth-child(2){border-right:0}
+  .stats div:nth-child(1),.stats div:nth-child(2){border-bottom:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">1박 2일 · 5인 · 아산 도고</p>
+  <h1>도고 온천 <em>일정표</em></h1>
+  <p class="sub">공통 일정이 기본으로 깔려 있습니다. 아래에서 이름을 누르면 그 사람의 이동 일정이 시간 순서에 끼워집니다. 일정을 누르면 경로와 소요시간이 열립니다.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-plan" aria-controls="p-plan" aria-selected="true">일정</button>
+  <button role="tab" id="tab-pack" aria-controls="p-pack" aria-selected="false">준비물</button>
+  <button role="tab" id="tab-shop" aria-controls="p-shop" aria-selected="false">쇼핑리스트</button>
+</nav>
+
+<!-- ================= 일정 ================= -->
+<section id="p-plan" role="tabpanel" aria-labelledby="tab-plan">
+  <div class="people" id="people"></div>
+  <div class="stage">
+    <div id="timeline"></div>
+    <aside class="detail-col" id="detailCol"></aside>
+  </div>
+</section>
+
+<!-- ================= 준비물 ================= -->
+<section id="p-pack" role="tabpanel" aria-labelledby="tab-pack" hidden>
+  <div class="listhead">
+    <div>
+      <h2>여행 준비물</h2>
+      <p>목록의 원본은 저장소의 <code>data/packing.json</code> 입니다. 파일을 고치고 새로고침하면 반영됩니다. 여기서 고친 내용은 이 기기에만 남고, JSON 내보내기로 파일에 반영할 수 있습니다.</p>
+    </div>
+    <div class="gauge"><div class="bar"><i id="packBar"></i></div><div class="num" id="packNum">0 / 0</div></div>
+  </div>
+  <div class="toolbar">
+    <button data-refetch="packing">파일에서 다시 불러오기</button>
+    <button data-save="packing">JSON 내보내기</button>
+    <button data-reset="packing">내 수정 되돌리기</button>
+    <button data-clear="packing">체크 전체 해제</button>
+    <span class="src" id="src-packing"></span>
+  </div>
+  <div id="packList"></div>
+  <div class="addrow" data-add="packing">
+    <select class="cat"></select>
+    <input type="text" class="nm" placeholder="추가할 준비물" maxlength="60">
+    <button type="button">추가</button>
+  </div>
+</section>
+
+<!-- ================= 쇼핑리스트 ================= -->
+<section id="p-shop" role="tabpanel" aria-labelledby="tab-shop" hidden>
+  <div class="listhead">
+    <div>
+      <h2>이마트 쇼핑리스트</h2>
+      <p>원본은 <code>data/shopping.json</code>. 10:00 아산 이마트 장보기 1시간용.</p>
+    </div>
+    <div class="gauge"><div class="bar"><i id="shopBar"></i></div><div class="num" id="shopNum">0 / 0</div></div>
+  </div>
+  <div class="toolbar">
+    <button data-refetch="shopping">파일에서 다시 불러오기</button>
+    <button data-save="shopping">JSON 내보내기</button>
+    <button data-reset="shopping">내 수정 되돌리기</button>
+    <button data-clear="shopping">체크 전체 해제</button>
+    <span class="src" id="src-shopping"></span>
+  </div>
+  <div id="shopList"></div>
+  <div class="addrow" data-add="shopping">
+    <select class="cat"></select>
+    <input type="text" class="nm" placeholder="추가할 품목" maxlength="60">
+    <input type="text" class="q" placeholder="수량" maxlength="14">
+    <button type="button">추가</button>
+  </div>
+</section>
+
+<footer class="foot">
+  소요시간·거리는 평시 기준 추정값입니다. 실제 출발 전에 실시간 교통으로 다시 확인하세요.<br>
+  일정·좌표는 <code>data/trip.json</code>, 목록은 <code>data/packing.json</code> · <code>data/shopping.json</code>.<br>
+  <span id="src-trip"></span>
+</footer>
+</div>
+
+<script>
+/* =====================================================================
+   데이터는 이제 저장소의 JSON 파일에서 읽습니다.
+     data/trip.json      · 사람 · 장소 좌표 · 일정
+     data/packing.json   · 준비물
+     data/shopping.json  · 쇼핑리스트
+   파일을 고쳐서 커밋하면 새로고침 때 반영됩니다.
+   아래 EMBEDDED 는 파일을 못 읽을 때(로컬에서 index.html 을 그냥 열었을 때 등)
+   쓰이는 예비본입니다. 평소에 손댈 필요 없습니다.
+   ===================================================================== */
+const SOURCES = { trip:'data/trip.json', packing:'data/packing.json', shopping:'data/shopping.json' };
+const EMBEDDED = {
+ "trip": {
+  "title": "도고 온천 일정표",
+  "subtitle": "1박 2일 · 5인 · 아산 도고",
+  "people": [
+   {
+    "id": "suhyuk",
+    "name": "수혁",
+    "s": "수",
+    "c": "#147B7B",
+    "role": "차량 · 홍성 출발"
+   },
+   {
+    "id": "yongmin",
+    "name": "용민",
+    "s": "용",
+    "c": "#B0472F",
+    "role": "버스 · 서울 출발"
+   },
+   {
+    "id": "sangwoo",
+    "name": "상우",
+    "s": "상",
+    "c": "#2F63A8",
+    "role": "차량 · 노은역 출발"
+   },
+   {
+    "id": "seokhoon",
+    "name": "석훈",
+    "s": "석",
+    "c": "#6B54A0",
+    "role": "상우 차 동승"
+   },
+   {
+    "id": "hyunho",
+    "name": "현호",
+    "s": "현",
+    "c": "#3C8748",
+    "role": "부강면에서 합류"
+   }
+  ],
+  "places": {
+   "hongseong": {
+    "n": "홍성중학교",
+    "lat": 36.6013,
+    "lng": 126.665
+   },
+   "onyang": {
+    "n": "아산 온양고속버스터미널",
+    "lat": 36.783,
+    "lng": 127.005
+   },
+   "emart": {
+    "n": "이마트 아산점",
+    "lat": 36.786,
+    "lng": 127.016
+   },
+   "lunch": {
+    "n": "이마트 주변 점심 식당",
+    "lat": 36.7853,
+    "lng": 127.0148
+   },
+   "artier": {
+    "n": "아르띠에 도고",
+    "lat": 36.762,
+    "lng": 126.849
+   },
+   "paradise": {
+    "n": "파라다이스 스파 도고",
+    "lat": 36.7601,
+    "lng": 126.8465
+   },
+   "bugang": {
+    "n": "휴식시간 (세종 부강면)",
+    "lat": 36.524,
+    "lng": 127.365
+   },
+   "noeun": {
+    "n": "노은역",
+    "lat": 36.3801,
+    "lng": 127.3237
+   },
+   "sjr": {
+    "n": "선정릉역",
+    "lat": 37.5106,
+    "lng": 127.0435
+   },
+   "seoulexp": {
+    "n": "서울경부고속버스터미널",
+    "lat": 37.503,
+    "lng": 127.0048
+   }
+  },
+  "schedule": [
+   {
+    "id": "s1",
+    "day": 1,
+    "start": "09:00",
+    "end": "09:55",
+    "kind": "move",
+    "who": [
+     "suhyuk"
+    ],
+    "title": "홍성중학교 → 온양터미널",
+    "from": "hongseong",
+    "to": "onyang",
+    "mode": "자동차",
+    "mins": 55,
+    "km": 44,
+    "back": "용민 도착 10:00 기준",
+    "note": "터미널에서 용민 픽업. 도착이 늦어지면 용민이 대합실에서 대기."
+   },
+   {
+    "id": "y1",
+    "day": 1,
+    "start": "07:50",
+    "end": "08:08",
+    "kind": "move",
+    "who": [
+     "yongmin"
+    ],
+    "title": "선정릉역 → 서울경부고속터미널",
+    "from": "sjr",
+    "to": "seoulexp",
+    "mode": "지하철 9호선",
+    "mins": 18,
+    "km": 8,
+    "back": "08:30 버스 · 20분 전",
+    "note": "9호선 급행이면 더 빠릅니다. 표는 미리 예매해두는 게 안전."
+   },
+   {
+    "id": "y2",
+    "day": 1,
+    "start": "08:30",
+    "end": "10:00",
+    "kind": "move",
+    "who": [
+     "yongmin"
+    ],
+    "fixed": true,
+    "title": "서울경부 → 온양터미널 고속버스",
+    "from": "seoulexp",
+    "to": "onyang",
+    "mode": "고속버스",
+    "mins": 90,
+    "km": 105,
+    "note": "08:30 탑승 · 10:00 도착. 이 시각이 오늘 일정의 기준점입니다."
+   },
+   {
+    "id": "g1",
+    "day": 1,
+    "start": "08:20",
+    "end": "08:52",
+    "kind": "move",
+    "who": [
+     "sangwoo",
+     "seokhoon"
+    ],
+    "title": "노은역 → 휴식시간(부강면)",
+    "from": "noeun",
+    "to": "bugang",
+    "mode": "자동차",
+    "mins": 32,
+    "km": 22,
+    "back": "이마트 10:00 도착 기준",
+    "note": "석훈은 노은역에서 상우 차에 탑승."
+   },
+   {
+    "id": "h1",
+    "day": 1,
+    "start": "08:50",
+    "end": "09:05",
+    "kind": "stay",
+    "who": [
+     "hyunho"
+    ],
+    "title": "휴식시간(부강면)에서 상우 차 탑승 대기",
+    "place": "bugang",
+    "note": "상우·석훈 08:52 도착 예정. 09:05 출발."
+   },
+   {
+    "id": "g2",
+    "day": 1,
+    "start": "09:05",
+    "end": "10:00",
+    "kind": "move",
+    "who": [
+     "sangwoo",
+     "seokhoon",
+     "hyunho"
+    ],
+    "title": "휴식시간(부강면) → 이마트 아산점",
+    "from": "bugang",
+    "to": "emart",
+    "mode": "자동차",
+    "mins": 55,
+    "km": 58,
+    "back": "장보기 10:00 시작 기준",
+    "note": "3명이 먼저 도착해서 장보기 시작."
+   },
+   {
+    "id": "s2",
+    "day": 1,
+    "start": "10:05",
+    "end": "10:20",
+    "kind": "move",
+    "who": [
+     "suhyuk",
+     "yongmin"
+    ],
+    "title": "온양터미널 → 이마트 아산점",
+    "from": "onyang",
+    "to": "emart",
+    "mode": "자동차",
+    "mins": 12,
+    "km": 4.5,
+    "note": "용민 픽업 후 이동. 장보기 중간에 합류합니다."
+   },
+   {
+    "id": "c1",
+    "day": 1,
+    "start": "10:00",
+    "end": "11:00",
+    "kind": "stay",
+    "who": "all",
+    "title": "아산 이마트 장보기",
+    "place": "emart",
+    "note": "상우·석훈·현호가 10:00에 시작, 수혁·용민은 10:20 합류. 쇼핑리스트 탭 참고."
+   },
+   {
+    "id": "c2",
+    "day": 1,
+    "start": "11:10",
+    "end": "12:05",
+    "kind": "stay",
+    "who": "all",
+    "title": "이마트 주변 점심식사",
+    "place": "lunch",
+    "note": "55분. 12:30 도착을 지키려면 여기서 늦어지면 안 됩니다."
+   },
+   {
+    "id": "c3",
+    "day": 1,
+    "start": "12:05",
+    "end": "12:30",
+    "kind": "move",
+    "who": "all",
+    "title": "이마트 아산점 → 아르띠에 도고",
+    "from": "emart",
+    "to": "artier",
+    "mode": "자동차",
+    "mins": 22,
+    "km": 19,
+    "back": "숙소 도착 12:30 기준"
+   },
+   {
+    "id": "c4",
+    "day": 1,
+    "start": "12:30",
+    "end": "12:55",
+    "kind": "stay",
+    "who": "all",
+    "fixed": true,
+    "title": "아르띠에 도고 도착 · 짐 풀기",
+    "place": "artier",
+    "note": "장 본 식재료는 바로 냉장고로. 수영복은 이때 챙겨서 나가기."
+   },
+   {
+    "id": "c5",
+    "day": 1,
+    "start": "12:55",
+    "end": "13:00",
+    "kind": "move",
+    "who": "all",
+    "title": "아르띠에 도고 → 파라다이스 스파 도고",
+    "from": "artier",
+    "to": "paradise",
+    "mode": "자동차 3분 / 도보 8분",
+    "mins": 3,
+    "km": 0.6
+   },
+   {
+    "id": "c6",
+    "day": 1,
+    "start": "13:00",
+    "end": "18:00",
+    "kind": "stay",
+    "who": "all",
+    "fixed": true,
+    "title": "파라다이스 스파 도고",
+    "place": "paradise",
+    "note": "입장 13:00 · 퇴장 18:00. 5시간."
+   },
+   {
+    "id": "c7",
+    "day": 1,
+    "start": "18:00",
+    "end": "18:05",
+    "kind": "move",
+    "who": "all",
+    "title": "파라다이스 → 아르띠에 도고",
+    "from": "paradise",
+    "to": "artier",
+    "mode": "자동차 3분 / 도보 8분",
+    "mins": 3,
+    "km": 0.6,
+    "note": "씻고 정리하면 바베큐까지 55분 여유."
+   },
+   {
+    "id": "c8",
+    "day": 1,
+    "start": "19:00",
+    "end": null,
+    "kind": "stay",
+    "who": "all",
+    "title": "바베큐",
+    "place": "artier",
+    "note": "숯 피우는 데 20~30분. 18:30쯤 불부터 붙여두면 편합니다."
+   },
+   {
+    "id": "c9",
+    "day": 2,
+    "start": "11:00",
+    "end": null,
+    "kind": "stay",
+    "who": "all",
+    "fixed": true,
+    "title": "아르띠에 도고 체크아웃",
+    "place": "artier",
+    "note": "10:30부터 짐 정리 시작 권장. 쓰레기·그릴 정리 확인."
+   }
+  ]
+ },
+ "packing": {
+  "groups": [
+   {
+    "name": "파라다이스 스파",
+    "items": [
+     {
+      "name": "수영복",
+      "note": "래시가드도 가능, 반드시 지참"
+     },
+     {
+      "name": "수건",
+      "note": "대여 여부 미리 확인"
+     },
+     "샤워용품",
+     "슬리퍼",
+     "방수팩",
+     "수영모",
+     "안경 쓰는 사람은 렌즈"
+    ]
+   },
+   {
+    "name": "숙소 · 바베큐",
+    "items": [
+     {
+      "name": "숯",
+      "qty": "있는지 확인"
+     },
+     "토치 / 착화제",
+     "집게·가위",
+     "일회용 장갑",
+     "키친타올",
+     "호일",
+     "쓰레기봉투",
+     "종이컵",
+     "물티슈",
+     "블루투스 스피커",
+     "보드게임"
+    ]
+   },
+   {
+    "name": "개인 짐",
+    "items": [
+     "갈아입을 옷",
+     "속옷",
+     "세면도구",
+     "휴대폰 충전기",
+     "보조배터리",
+     "상비약",
+     "선크림",
+     "현금 조금"
+    ]
+   },
+   {
+    "name": "차량 · 이동",
+    "items": [
+     {
+      "name": "운전자 면허증",
+      "note": "수혁, 상우"
+     },
+     "하이패스 카드",
+     "차량용 충전 케이블",
+     {
+      "name": "고속버스 예매 확인",
+      "note": "용민 08:30 서울경부"
+     }
+    ]
+   },
+   {
+    "name": "정산",
+    "items": [
+     "숙소 예약 확인서",
+     "파라다이스 입장권 예매",
+     "정산용 계좌·앱 정리"
+    ]
+   }
+  ]
+ },
+ "shopping": {
+  "groups": [
+   {
+    "name": "바베큐 고기",
+    "items": [
+     {
+      "name": "삼겹살",
+      "qty": "2kg"
+     },
+     {
+      "name": "목살",
+      "qty": "1kg"
+     },
+     {
+      "name": "소고기 (구이용)",
+      "qty": "1kg"
+     },
+     {
+      "name": "소시지",
+      "qty": "2팩"
+     },
+     {
+      "name": "닭꼬치",
+      "qty": "1팩"
+     }
+    ]
+   },
+   {
+    "name": "구이 채소 · 곁들임",
+    "items": [
+     {
+      "name": "양파",
+      "qty": "3개"
+     },
+     {
+      "name": "대파",
+      "qty": "2대"
+     },
+     {
+      "name": "버섯",
+      "qty": "2팩"
+     },
+     {
+      "name": "마늘",
+      "qty": "1팩"
+     },
+     {
+      "name": "상추·깻잎",
+      "qty": "2팩"
+     },
+     {
+      "name": "김치",
+      "qty": "1팩"
+     },
+     {
+      "name": "쌈장·소금",
+      "qty": "각 1개"
+     }
+    ]
+   },
+   {
+    "name": "식사 · 안주",
+    "items": [
+     {
+      "name": "라면",
+      "qty": "5개"
+     },
+     {
+      "name": "즉석밥",
+      "qty": "5개"
+     },
+     {
+      "name": "과자",
+      "qty": "적당히"
+     },
+     {
+      "name": "아이스크림",
+      "qty": "5개"
+     },
+     {
+      "name": "해장용 국",
+      "qty": "2팩"
+     }
+    ]
+   },
+   {
+    "name": "음료 · 주류",
+    "items": [
+     {
+      "name": "생수 2L",
+      "qty": "3병"
+     },
+     {
+      "name": "맥주",
+      "qty": "24캔"
+     },
+     {
+      "name": "소주",
+      "qty": "5병"
+     },
+     {
+      "name": "탄산음료",
+      "qty": "2병"
+     },
+     {
+      "name": "이온음료",
+      "qty": "5개"
+     },
+     {
+      "name": "얼음",
+      "qty": "2봉"
+     }
+    ]
+   },
+   {
+    "name": "잡화",
+    "items": [
+     {
+      "name": "종이접시·수저",
+      "qty": "넉넉히"
+     },
+     {
+      "name": "쓰레기봉투",
+      "qty": "1롤"
+     },
+     {
+      "name": "지퍼백",
+      "qty": "1팩"
+     },
+     {
+      "name": "물티슈",
+      "qty": "2개"
+     }
+    ]
+   }
+  ]
+ }
+};
+
+let PEOPLE = EMBEDDED.trip.people, PLACES = EMBEDDED.trip.places, SCHEDULE = EMBEDDED.trip.schedule;
+
+/* ===================== 여기부터는 동작 코드 ===================== */
+
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const P = id => PEOPLE.find(p=>p.id===id);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---- 저장소: 아티팩트면 window.storage, 웹이면 localStorage, 둘 다 없으면 메모리 ---- */
+const mem = {};
+const LS = (()=>{ try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return localStorage; }catch(e){ return null; } })();
+const store = {
+  async get(k){
+    try{ if(window.storage){ const r = await window.storage.get(k,false); if(r) return JSON.parse(r.value); } }catch(e){}
+    if(LS){ const v = LS.getItem(k); if(v!=null){ try{ return JSON.parse(v); }catch(e){} } }
+    return k in mem ? mem[k] : null;
+  },
+  async set(k,v){
+    mem[k]=v;
+    try{ if(window.storage) await window.storage.set(k, JSON.stringify(v), false); }catch(e){}
+    if(LS){ try{ v===null ? LS.removeItem(k) : LS.setItem(k, JSON.stringify(v)); }catch(e){} }
+  }
+};
+
+/* ---- 파일 읽기 ---- */
+async function fetchJSON(url){
+  try{
+    const r = await fetch(url + (url.includes('?')?'&':'?') + 'v=' + Date.now(), {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return await r.json();
+  }catch(e){ return null; }
+}
+const digest = s => { let h=5381; for(let i=0;i<s.length;i++) h=((h*33)^s.charCodeAt(i))>>>0; return h.toString(36); };
+
+let state = { picked:new Set(), open:null, lists:{}, base:{}, fileHash:{}, srcName:{}, edited:{}, checks:{} };
+
+/* ---------------- 탭 ---------------- */
+$$('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  $$('nav.tabs button').forEach(x=>{
+    const on = x===b;
+    x.setAttribute('aria-selected', on);
+    $('#'+x.getAttribute('aria-controls')).hidden = !on;
+  });
+}));
+
+/* ---------------- 사람 칩 ---------------- */
+function renderPeople(){
+  const el = $('#people');
+  el.innerHTML = PEOPLE.map(p=>`
+    <button class="chip" data-p="${p.id}" style="--c:${p.c}" aria-pressed="false">
+      <span class="dot">${p.s}</span>${p.name}<small>${esc(p.role)}</small>
+    </button>`).join('') + `<span class="hint">눌러서 켜기 / 끄기</span>`;
+  $$('.chip',el).forEach(c=>c.addEventListener('click',()=>{
+    const id=c.dataset.p, on=!state.picked.has(id);
+    on ? state.picked.add(id) : state.picked.delete(id);
+    c.setAttribute('aria-pressed', on);
+    renderTimeline();
+  }));
+}
+
+/* ---------------- 일정 ---------------- */
+const toMin = t => { const [h,m]=t.split(':').map(Number); return h*60+m; };
+
+function visible(){
+  return SCHEDULE
+    .filter(it => it.who==='all' || it.who.some(w=>state.picked.has(w)))
+    .sort((a,b)=> a.day-b.day || toMin(a.start)-toMin(b.start));
+}
+
+function whoDots(it){
+  if(it.who==='all') return `<span class="tag">공통</span>`;
+  return `<span class="who">${it.who.map(w=>{const p=P(w);
+    return `<i style="background:${p.c}" title="${p.name}">${p.s}</i>`}).join('')}</span>`;
+}
+
+function renderTimeline(){
+  const items = visible(), host = $('#timeline');
+  let html='', lastDay=0;
+  for(const it of items){
+    if(it.day!==lastDay){
+      if(lastDay) html+='</ol>';
+      html += `<div class="daymark"><b>${it.day}일차</b><span>${it.day===1?'이동 · 스파 · 바베큐':'체크아웃'}</span></div><ol class="tl">`;
+      lastDay = it.day;
+    }
+    const span = it.end ? `${it.start}–${it.end}` : `${it.start}`;
+    html += `<li>
+      <span class="node ${it.fixed?'fixed':(it.kind==='move'?'move':'')}"></span>
+      <span class="at">${it.kind==='move'?(it.mins+'분'):(it.end?dur(it):'')}</span>
+      <button class="item" data-id="${it.id}" aria-expanded="false">
+        <span class="row1">
+          <span class="time ${it.fixed?'f':''}">${span}</span>
+          <span class="ttl">${it.kind==='move'?arrow(it.title):`<b>${esc(it.title)}</b>`}</span>
+        </span>
+        <span class="row2">
+          ${whoDots(it)}
+          ${it.fixed?'<span class="tag fx">고정 시각</span>':''}
+          ${it.kind==='move'?`<span class="tag">${esc(it.mode)}</span>`:''}
+          ${it.back?`<span class="tag rv">역산 · ${esc(it.back)}</span>`:''}
+        </span>
+        ${it.note?`<span class="note">${esc(it.note)}</span>`:''}
+      </button>
+      <div class="slot" id="slot-${it.id}"></div>
+    </li>`;
+  }
+  html += lastDay ? '</ol>' : '';
+  host.innerHTML = html;
+  $$('.item',host).forEach(b=>b.addEventListener('click',()=>toggle(b.dataset.id)));
+  if(state.open && !items.some(i=>i.id===state.open)) state.open=null;
+  paintDetail();
+}
+function arrow(t){
+  const p = t.split('→');
+  return p.length===2 ? `<b>${esc(p[0].trim())}</b> <span style="color:var(--ink-38)">→</span> <b>${esc(p[1].trim())}</b>` : `<b>${esc(t)}</b>`;
+}
+function dur(it){ const m = toMin(it.end)-toMin(it.start); return m>=60 ? (m%60? (m/60|0)+'시간'+(m%60)+'분' : (m/60|0)+'시간') : m+'분'; }
+
+function toggle(id){
+  state.open = (state.open===id) ? null : id;
+  $$('.item').forEach(b=>b.setAttribute('aria-expanded', b.dataset.id===state.open));
+  paintDetail();
+}
+
+function paintDetail(){
+  $$('.slot').forEach(s=>s.innerHTML='');
+  const col = $('#detailCol');
+  const it = SCHEDULE.find(x=>x.id===state.open);
+  if(!it){
+    col.innerHTML = `<div class="empty">일정을 누르면<br>이동 경로 · 소요시간이 여기에 열립니다</div>`;
+    return;
+  }
+  const card = detailHTML(it);
+  const wide = window.matchMedia('(min-width:940px)').matches;
+  if(wide){ col.innerHTML = card; }
+  else { col.innerHTML=''; const s=$('#slot-'+it.id); if(s) s.innerHTML = card; }
+}
+window.addEventListener('resize', ()=>{ if(state.open) paintDetail(); });
+
+function detailHTML(it){
+  const move = it.kind==='move';
+  const a = move ? PLACES[it.from] : PLACES[it.place];
+  const b = move ? PLACES[it.to] : null;
+  const dirUrl = move
+    ? `https://www.google.com/maps/dir/?api=1&origin=${a.lat},${a.lng}&destination=${b.lat},${b.lng}&travelmode=${/버스|지하철/.test(it.mode)?'transit':'driving'}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.n)}`;
+  const naver = `https://map.naver.com/p/search/${encodeURIComponent((b||a).n)}`;
+
+  const stats = move ? [
+    ['소요', it.mins+'분'], ['거리', it.km+'km'], ['출발', it.start], ['도착', it.end]
+  ] : [
+    ['시작', it.start], ['종료', it.end||'—'], ['머무름', it.end?dur(it):'—'], ['인원', it.who==='all'?'5명':it.who.length+'명']
+  ];
+
+  return `<div class="detail">
+    <div class="dhead">
+      <div class="dkind">${move?'이동 경로':'머무는 일정'}</div>
+      <div class="dttl">${esc(it.title)}</div>
+      <div class="dpath">${move
+        ? `<span>${esc(a.n)}</span> → <span>${esc(b.n)}</span> · ${esc(it.mode)}`
+        : `<span>${esc(a.n)}</span>`}</div>
+    </div>
+    <dl class="stats">${stats.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+    ${miniMap(a,b,it)}
+    ${it.back?`<div class="dnote"><b style="font-weight:500;color:var(--spring)">역산</b> ${esc(it.back)}</div>`:''}
+    ${it.note?`<div class="dnote">${esc(it.note)}</div>`:''}
+    <div class="links">
+      <a href="${dirUrl}" target="_blank" rel="noopener">구글 지도 ${move?'길찾기':'장소'}</a>
+      <a href="${naver}" target="_blank" rel="noopener">네이버 지도</a>
+    </div>
+  </div>`;
+}
+
+/* ---- 미니 지도: 실제 좌표를 투영해서 그립니다 ---- */
+function miniMap(a,b,it){
+  const W=336,H=190,pad=34;
+  const pts = b?[a,b]:[a];
+  const midLat = pts.reduce((s,p)=>s+p.lat,0)/pts.length;
+  const k = Math.cos(midLat*Math.PI/180);
+  const px = pts.map(p=>({x:p.lng*k, y:-p.lat, n:p.n}));
+  let minx=Math.min(...px.map(p=>p.x)), maxx=Math.max(...px.map(p=>p.x));
+  let miny=Math.min(...px.map(p=>p.y)), maxy=Math.max(...px.map(p=>p.y));
+  let sx=maxx-minx, sy=maxy-miny, min=0.004;
+  if(sx<min){ const c=(minx+maxx)/2; minx=c-min/2; maxx=c+min/2; sx=min; }
+  if(sy<min){ const c=(miny+maxy)/2; miny=c-min/2; maxy=c+min/2; sy=min; }
+  const sc = Math.min((W-pad*2)/sx,(H-pad*2)/sy);
+  const cx=(minx+maxx)/2, cy=(miny+maxy)/2;
+  const T = p => ({ x: W/2+(p.x-cx)*sc, y: H/2+(p.y-cy)*sc });
+  const q = px.map(T);
+
+  // 축척 바 (투영 1단위 ≈ 111km)
+  const KM_PER_UNIT = 111;
+  const barKm = (64/sc)*KM_PER_UNIT;
+  const nice = barKm<1 ? Number(barKm.toFixed(1)) : Math.round(barKm);
+  const barPxFinal = (nice/KM_PER_UNIT)*sc;
+
+  let g = `<svg class="map" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(it.title)} 경로 약도">
+    <defs><pattern id="pg" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="rgba(15,46,42,.09)"/></pattern></defs>
+    <rect width="${W}" height="${H}" fill="#E9F0ED"/><rect width="${W}" height="${H}" fill="url(#pg)"/>`;
+
+  if(q.length===2){
+    const [s,e]=q;
+    const mx=(s.x+e.x)/2, my=(s.y+e.y)/2;
+    const nx=-(e.y-s.y), ny=(e.x-s.x), len=Math.hypot(nx,ny)||1;
+    const bend=Math.min(26, Math.hypot(e.x-s.x,e.y-s.y)*0.18);
+    const c={x:mx+nx/len*bend, y:my+ny/len*bend};
+    g += `<path d="M${s.x} ${s.y} Q${c.x} ${c.y} ${e.x} ${e.y}" fill="none" stroke="#147B7B" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="7 5" opacity=".85"/>`;
+    g += `<circle cx="${s.x}" cy="${s.y}" r="6" fill="#E9F0ED" stroke="#0F2E2A" stroke-width="2.5"/>`;
+    g += `<circle cx="${e.x}" cy="${e.y}" r="6.5" fill="#B0472F"/><circle cx="${e.x}" cy="${e.y}" r="11" fill="none" stroke="#B0472F" stroke-width="1" opacity=".45"/>`;
+    g += label(s, px[0].n, W, '출발');
+    g += label(e, px[1].n, W, '도착');
+  } else {
+    const s=q[0];
+    g += `<circle cx="${s.x}" cy="${s.y}" r="7" fill="#147B7B"/>
+          <circle cx="${s.x}" cy="${s.y}" r="14" fill="none" stroke="#147B7B" stroke-width="1" opacity=".4"/>
+          <circle cx="${s.x}" cy="${s.y}" r="21" fill="none" stroke="#147B7B" stroke-width="1" opacity=".2"/>`;
+    g += label(s, px[0].n, W, '');
+  }
+
+  g += `<g opacity=".55">
+      <line x1="14" y1="${H-14}" x2="${14+barPxFinal}" y2="${H-14}" stroke="#0F2E2A" stroke-width="1.5"/>
+      <line x1="14" y1="${H-18}" x2="14" y2="${H-10}" stroke="#0F2E2A" stroke-width="1.5"/>
+      <line x1="${14+barPxFinal}" y1="${H-18}" x2="${14+barPxFinal}" y2="${H-10}" stroke="#0F2E2A" stroke-width="1.5"/>
+      <text x="${18+barPxFinal}" y="${H-10}" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#0F2E2A">${nice}km</text>
+    </g></svg>`;
+  return g;
+}
+function label(p,name,W,kind){
+  const right = p.x < W/2;
+  const ax = right ? p.x+12 : p.x-12;
+  const anchor = right ? 'start' : 'end';
+  const y = p.y < 26 ? p.y+20 : p.y-11;
+  return `<text x="${ax}" y="${y}" text-anchor="${anchor}" font-family="IBM Plex Sans KR, sans-serif" font-size="11" font-weight="500" fill="#0F2E2A">${esc(name)}</text>
+    ${kind?`<text x="${ax}" y="${y+12}" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace" font-size="9" fill="rgba(15,46,42,.5)">${kind}</text>`:''}`;
+}
+
+/* ---------------- 체크리스트 ---------------- */
+const slug = s => String(s).toLowerCase().replace(/\s+/g,'-').replace(/[^\w가-힣-]/g,'');
+function norm(list){
+  return {groups:(list.groups||[]).map(g=>({
+    name:g.name,
+    items:(g.items||[]).map(i=>{
+      const o = typeof i==='string' ? {name:i} : {...i};
+      o.key = slug(g.name)+'::'+slug(o.name);
+      return o;
+    })
+  }))};
+}
+function renderList(which){
+  const host = $(which==='packing'?'#packList':'#shopList');
+  const data = norm(state.lists[which]);
+  let total=0, done=0;
+  host.innerHTML = data.groups.map(g=>`
+    <div class="grp"><h3>${esc(g.name)}</h3><ul>
+      ${g.items.map(i=>{
+        const on = !!state.checks[which+':'+i.key]; total++; if(on) done++;
+        return `<li class="${on?'done':''}">
+          <label><input type="checkbox" ${on?'checked':''} data-k="${which}:${i.key}">
+            <span class="txt">${esc(i.name)}${i.qty?`<span class="qty">${esc(i.qty)}</span>`:''}
+            ${i.note?`<span class="sub2">${esc(i.note)}</span>`:''}</span>
+          </label>
+          <button class="del" data-del="${which}|${esc(g.name)}|${esc(i.name)}" title="삭제" aria-label="${esc(i.name)} 삭제">×</button>
+        </li>`}).join('')}
+    </ul></div>`).join('') || `<div class="empty">목록이 비어 있습니다<br>아래에서 항목을 추가하거나 JSON을 불러오세요</div>`;
+
+  $$('input[type=checkbox]',host).forEach(cb=>cb.addEventListener('change',async()=>{
+    state.checks[cb.dataset.k] = cb.checked;
+    cb.closest('li').classList.toggle('done', cb.checked);
+    await store.set('dogo:checks', state.checks);
+    gauge(which);
+  }));
+  $$('.del',host).forEach(b=>b.addEventListener('click',()=>{
+    const [w,gn,nm] = b.dataset.del.split('|');
+    const g = state.lists[w].groups.find(x=>x.name===gn);
+    g.items = g.items.filter(i=> (typeof i==='string'?i:i.name) !== nm);
+    saveLists(w); renderList(w); fillCats(w);
+  }));
+  gauge(which, total, done);
+}
+function gauge(which,total,done){
+  if(total===undefined){
+    const d = norm(state.lists[which]); total=0; done=0;
+    d.groups.forEach(g=>g.items.forEach(i=>{total++; if(state.checks[which+':'+i.key]) done++;}));
+  }
+  const bar = $(which==='packing'?'#packBar':'#shopBar');
+  const num = $(which==='packing'?'#packNum':'#shopNum');
+  bar.style.width = total? (done/total*100)+'%' : '0%';
+  num.textContent = `${done} / ${total}`;
+}
+function fillCats(which){
+  const sel = $(`[data-add="${which}"] .cat`);
+  const names = (state.lists[which].groups||[]).map(g=>g.name);
+  sel.innerHTML = names.map(n=>`<option>${esc(n)}</option>`).join('') + `<option value="__new">＋ 새 분류…</option>`;
+}
+async function loadList(w){
+  const file = await fetchJSON(SOURCES[w]);
+  const ok = file && Array.isArray(file.groups);
+  const base = ok ? file : EMBEDDED[w];
+  state.srcName[w] = ok ? SOURCES[w] : '내장 예비본';
+  state.base[w] = structuredClone(base);
+  state.fileHash[w] = digest(JSON.stringify(base));
+  const ov = await store.get('dogo:ov:'+w);
+  const fresh = ov && ov.h === state.fileHash[w];
+  state.lists[w] = fresh ? ov.d : structuredClone(base);
+  state.edited[w] = !!fresh;
+}
+async function saveLists(w){
+  state.edited[w] = true;
+  await store.set('dogo:ov:'+w, {h:state.fileHash[w], d:state.lists[w]});
+  paintSrc(w);
+}
+function paintSrc(w){
+  const el = $('#src-'+w); if(!el) return;
+  const n = (state.lists[w].groups||[]).reduce((s,g)=>s+(g.items||[]).length,0);
+  el.innerHTML = `<b>${esc(state.srcName[w])}</b> · ${n}항목${state.edited[w]?' · 이 기기에서 수정함':''}`;
+}
+
+['packing','shopping'].forEach(which=>{
+  const row = $(`[data-add="${which}"]`);
+  row.querySelector('button').addEventListener('click',()=>{
+    const nm = row.querySelector('.nm').value.trim();
+    if(!nm) return;
+    let cat = row.querySelector('.cat').value;
+    if(cat==='__new'){
+      cat = prompt('새 분류 이름')?.trim(); if(!cat) return;
+      state.lists[which].groups.push({name:cat, items:[]});
+    }
+    const q = row.querySelector('.q')?.value.trim();
+    const g = state.lists[which].groups.find(x=>x.name===cat);
+    g.items.push(q?{name:nm,qty:q}:nm);
+    row.querySelector('.nm').value=''; if(row.querySelector('.q')) row.querySelector('.q').value='';
+    saveLists(which); fillCats(which); renderList(which);
+  });
+  row.querySelector('.nm').addEventListener('keydown',e=>{ if(e.key==='Enter') row.querySelector('button').click(); });
+});
+
+$$('[data-save]').forEach(b=>b.addEventListener('click',()=>{
+  const w=b.dataset.save;
+  // 저장소의 data/<w>.json 을 그대로 덮어쓸 수 있는 형태로 내려받습니다
+  const blob = new Blob([JSON.stringify(state.lists[w],null,2)+'\n'],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download = w+'.json'; a.click(); URL.revokeObjectURL(a.href);
+}));
+$$('[data-refetch]').forEach(b=>b.addEventListener('click',async()=>{
+  const w=b.dataset.refetch;
+  b.disabled=true; b.textContent='불러오는 중…';
+  await loadList(w); fillCats(w); renderList(w);
+  b.disabled=false; b.textContent='파일에서 다시 불러오기';
+}));
+$$('[data-reset]').forEach(b=>b.addEventListener('click',async()=>{
+  const w=b.dataset.reset;
+  if(!state.edited[w]){ alert('이 기기에서 수정한 내용이 없습니다. 지금 목록이 파일 그대로입니다.'); return; }
+  if(!confirm('이 기기에서 추가·삭제한 항목을 버리고 파일 내용으로 돌아갑니다.')) return;
+  await store.set('dogo:ov:'+w, null);
+  state.lists[w]=structuredClone(state.base[w]); state.edited[w]=false;
+  fillCats(w); renderList(w); paintSrc(w);
+}));
+$$('[data-clear]').forEach(b=>b.addEventListener('click',async()=>{
+  const w=b.dataset.clear;
+  Object.keys(state.checks).forEach(k=>{ if(k.startsWith(w+':')) delete state.checks[k]; });
+  await store.set('dogo:checks', state.checks); renderList(w);
+}));
+
+/* ---------------- 시작 ---------------- */
+(async function init(){
+  state.checks = (await store.get('dogo:checks')) || {};
+
+  const trip = await fetchJSON(SOURCES.trip);
+  const ok = trip && Array.isArray(trip.schedule) && trip.people && trip.places;
+  const t = ok ? trip : EMBEDDED.trip;
+  PEOPLE = t.people; PLACES = t.places; SCHEDULE = t.schedule;
+  if(t.title){
+    const w = t.title.split(' '), last = w.pop();
+    $('h1').innerHTML = (w.length? esc(w.join(' '))+' ' : '') + `<em>${esc(last)}</em>`;
+    document.title = t.title;
+  }
+  if(t.subtitle) $('.eyebrow').textContent = t.subtitle;
+  const st = $('#src-trip');
+  if(st) st.innerHTML = ok
+    ? `일정 데이터: <b style="font-weight:400;color:var(--spring)">${esc(SOURCES.trip)}</b> · ${SCHEDULE.length}건`
+    : `일정 데이터: 내장 예비본 (${esc(SOURCES.trip)} 을 읽지 못했습니다 — 파일 위치나 이름을 확인하세요)`;
+
+  renderPeople(); renderTimeline();
+  for(const w of ['packing','shopping']){ await loadList(w); fillCats(w); renderList(w); paintSrc(w); }
+})();
+</script>
+</body>
+</html>
